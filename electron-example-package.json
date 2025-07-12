@@ -1,0 +1,30 @@
+{
+  "name": "electron-window-manager-example",
+  "version": "1.0.0",
+  "description": "Electron 应用示例，展示如何使用窗口管理插件",
+  "main": "example.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build-plugin": "cargo build --release && copy target\\release\\test3.dll test3.win32-x64-msvc.node",
+    "test-plugin": "node test-plugin.js"
+  },
+  "keywords": [
+    "electron",
+    "window-manager",
+    "rust",
+    "napi",
+    "desktop"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^27.0.0"
+  },
+  "dependencies": {
+    "test3": "file:./"
+  },
+  "engines": {
+    "node": ">= 16"
+  }
+}

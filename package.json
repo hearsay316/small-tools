@@ -1,0 +1,45 @@
+{
+  "name": "window-manager-electron",
+  "version": "1.0.0",
+  "description": "Window management tool built with Electron and Rust",
+  "main": "example.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "start": "electron example.js",
+    "dev": "electron example.js --enable-logging",
+    "build": "napi build --platform --release",
+    "build:debug": "napi build --platform",
+    "artifacts": "napi artifacts",
+    "prepublishOnly": "napi prepublish -t npm",
+    "test": "ava",
+    "test-plugin": "node test-plugin.js",
+    "test-silent": "node test-plugin-silent.js",
+    "test-hidden": "cscript run-hidden.vbs",
+    "test-hide-show": "node test-hide-show.js",
+    "universal": "napi universal",
+    "version": "napi version"
+  },
+  "napi": {
+    "name": "test3",
+    "triples": {
+      "additional": [
+        "i686-pc-windows-msvc"
+      ]
+    }
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@napi-rs/cli": "^2.18.4",
+    "ava": "^6.0.1",
+    "electron": "^28.0.0"
+  },
+  "dependencies": {
+    "electron": "^28.0.0"
+  },
+  "ava": {
+    "timeout": "3m"
+  },
+  "engines": {
+    "node": ">= 10"
+  }
+}

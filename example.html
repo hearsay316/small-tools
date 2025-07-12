@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>窗口管理工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            max-width: 600px;
+            width: 90%;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #4a5568;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn.danger {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .btn.danger:hover {
+            box-shadow: 0 8px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        .btn.success {
+            background: linear-gradient(45deg, #51cf66, #40c057);
+            box-shadow: 0 4px 15px rgba(81, 207, 102, 0.3);
+        }
+
+        .btn.success:hover {
+            box-shadow: 0 8px 25px rgba(81, 207, 102, 0.4);
+        }
+
+        .status {
+            background: rgba(74, 85, 104, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .status h3 {
+            color: #4a5568;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .status-content {
+            color: #718096;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            white-space: pre-wrap;
+        }
+
+        .api-status {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .api-loaded {
+            background: rgba(81, 207, 102, 0.1);
+            color: #40c057;
+            border: 1px solid rgba(81, 207, 102, 0.3);
+        }
+
+        .api-fallback {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ee5a24;
+            border: 1px solid rgba(255, 107, 107, 0.3);
+        }
+
+        .shortcuts {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #718096;
+            text-align: center;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+
+        .loading {
+            animation: pulse 1s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🪟 窗口管理工具</h1>
+        
+        <div id="api-status" class="api-status">
+            <span id="api-status-text">正在检查 API 状态...</span>
+        </div>
+
+        <div class="button-grid">
+            <button id="minimize-btn" class="btn">📉 最小化其他窗口</button>
+            <button id="hide-btn" class="btn">👻 隐藏其他窗口</button>
+            <button id="topmost-btn" class="btn">📌 设置窗口置顶</button>
+            <button id="remove-topmost-btn" class="btn danger">📌 取消窗口置顶</button>
+            <button id="aggressive-btn" class="btn">🔥 激进置顶模式</button>
+            <button id="ultimate-btn" class="btn">🚀 终极置顶模式</button>
+            <button id="super-ultimate-btn" class="btn">⚡ 超级终极置顶</button>
+            <button id="start-monitor-btn" class="btn success">🔄 启动持续监控</button>
+            <button id="stop-monitor-btn" class="btn danger">⏹️ 停止监控</button>
+            <button id="window-count-btn" class="btn">📊 获取窗口数量</button>
+        </div>
+
+        <div class="status">
+            <h3>📋 操作状态</h3>
+            <div id="status-content" class="status-content">等待操作...</div>
+        </div>
+
+        <div class="shortcuts">
+            <p>💡 提示：使用键盘快捷键可以快速操作</p>
+            <p>Ctrl+M: 最小化 | Ctrl+H: 隐藏 | Ctrl+T: 置顶 | Ctrl+Shift+T: 取消置顶</p>
+        </div>
+    </div>
+
+    <script>
+        console.log('🎯 渲染进程脚本开始执行');
+        
+        // 检查 electronAPI 是否可用
+        function checkAPIStatus() {
+            const apiStatus = document.getElementById('api-status');
+            const apiStatusText = document.getElementById('api-status-text');
+            
+            if (window.electronAPI) {
+                console.log('✅ electronAPI 已加载');
+                console.log('📋 可用方法:', Object.keys(window.electronAPI));
+                apiStatus.className = 'api-status api-loaded';
+                apiStatusText.textContent = '✅ Electron API 已成功加载';
+                return true;
+            } else {
+                console.warn('⚠️ electronAPI 未加载，使用回退模式');
+                apiStatus.className = 'api-status api-fallback';
+                apiStatusText.textContent = '⚠️ Electron API 未加载，功能可能受限';
+                
+                // 创建回退 API
+                window.electronAPI = {
+                    minimizeOtherWindows: () => Promise.resolve('回退模式：功能不可用'),
+                    hideOtherWindows: () => Promise.resolve('回退模式：功能不可用'),
+                    setCurrentWindowTopmost: () => Promise.resolve('回退模式：功能不可用'),
+                    removeCurrentWindowTopmost: () => Promise.resolve('回退模式：功能不可用'),
+                    setCurrentWindowTopmostAggressive: () => Promise.resolve('回退模式：功能不可用'),
+                    setCurrentWindowTopmostUltimate: () => Promise.resolve('回退模式：功能不可用'),
+                    setCurrentWindowTopmostSuperUltimate: () => Promise.resolve('回退模式：功能不可用'),
+                    startTopmostMonitor: () => Promise.resolve('回退模式：功能不可用'),
+                    stopTopmostMonitor: () => Promise.resolve('回退模式：功能不可用'),
+                    getWindowCount: () => Promise.resolve(0)
+                };
+                return false;
+            }
+        }
+
+        // 更新状态显示
+        function updateStatus(message, isError = false) {
+            const statusContent = document.getElementById('status-content');
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = isError ? '❌' : '✅';
+            statusContent.textContent = `[${timestamp}] ${prefix} ${message}`;
+            console.log(`${prefix} ${message}`);
+        }
+
+        // 执行操作的通用函数
+        async function executeAction(actionName, apiMethod, buttonId) {
+            const button = document.getElementById(buttonId);
+            const originalText = button.textContent;
+            
+            try {
+                button.classList.add('loading');
+                button.textContent = '⏳ 执行中...';
+                
+                console.log(`🚀 执行操作: ${actionName}`);
+                const result = await apiMethod();
+                
+                if (result && result.error) {
+                    updateStatus(`${actionName} 失败: ${result.error}`, true);
+                } else {
+                    updateStatus(`${actionName} 成功: ${JSON.stringify(result)}`);
+                }
+            } catch (error) {
+                console.error(`❌ ${actionName} 错误:`, error);
+                updateStatus(`${actionName} 错误: ${error.message}`, true);
+            } finally {
+                button.classList.remove('loading');
+                button.textContent = originalText;
+            }
+        }
+
+        // 等待 DOM 加载完成
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('📄 DOM 加载完成');
+            
+            // 检查 API 状态
+            setTimeout(checkAPIStatus, 100);
+
+            // 绑定按钮事件
+            document.getElementById('minimize-btn').addEventListener('click', () => {
+                executeAction('最小化其他窗口', window.electronAPI.minimizeOtherWindows, 'minimize-btn');
+            });
+
+            document.getElementById('hide-btn').addEventListener('click', () => {
+                executeAction('隐藏其他窗口', window.electronAPI.hideOtherWindows, 'hide-btn');
+            });
+
+            document.getElementById('topmost-btn').addEventListener('click', () => {
+                executeAction('设置窗口置顶', window.electronAPI.setCurrentWindowTopmost, 'topmost-btn');
+            });
+
+            document.getElementById('remove-topmost-btn').addEventListener('click', () => {
+                executeAction('取消窗口置顶', window.electronAPI.removeCurrentWindowTopmost, 'remove-topmost-btn');
+            });
+
+            document.getElementById('aggressive-btn').addEventListener('click', () => {
+                executeAction('激进置顶模式', window.electronAPI.setCurrentWindowTopmostAggressive, 'aggressive-btn');
+            });
+
+            document.getElementById('ultimate-btn').addEventListener('click', () => {
+                executeAction('终极置顶模式', window.electronAPI.setCurrentWindowTopmostUltimate, 'ultimate-btn');
+            });
+
+            document.getElementById('super-ultimate-btn').addEventListener('click', () => {
+                executeAction('超级终极置顶', window.electronAPI.setCurrentWindowTopmostSuperUltimate, 'super-ultimate-btn');
+            });
+
+            document.getElementById('start-monitor-btn').addEventListener('click', () => {
+                executeAction('启动持续监控', window.electronAPI.startTopmostMonitor, 'start-monitor-btn');
+            });
+
+            document.getElementById('stop-monitor-btn').addEventListener('click', () => {
+                executeAction('停止监控', window.electronAPI.stopTopmostMonitor, 'stop-monitor-btn');
+            });
+
+            document.getElementById('window-count-btn').addEventListener('click', () => {
+                executeAction('获取窗口数量', window.electronAPI.getWindowCount, 'window-count-btn');
+            });
+
+            // 键盘快捷键
+            document.addEventListener('keydown', (event) => {
+                if (event.ctrlKey) {
+                    switch (event.key.toLowerCase()) {
+                        case 'm':
+                            event.preventDefault();
+                            document.getElementById('minimize-btn').click();
+                            break;
+                        case 'h':
+                            event.preventDefault();
+                            document.getElementById('hide-btn').click();
+                            break;
+                        case 't':
+                            event.preventDefault();
+                            if (event.shiftKey) {
+                                document.getElementById('remove-topmost-btn').click();
+                            } else {
+                                document.getElementById('topmost-btn').click();
+                            }
+                            break;
+                    }
+                }
+            });
+
+            updateStatus('应用程序已准备就绪');
+        });
+
+        // 全局错误处理
+        window.addEventListener('error', (event) => {
+            console.error('❌ 全局错误:', event.error);
+            updateStatus(`全局错误: ${event.error.message}`, true);
+        });
+
+        window.addEventListener('unhandledrejection', (event) => {
+            console.error('❌ 未处理的 Promise 拒绝:', event.reason);
+            updateStatus(`Promise 错误: ${event.reason}`, true);
+        });
+    </script>
+</body>
+</html>
