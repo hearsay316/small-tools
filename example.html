@@ -165,6 +165,12 @@
             <button id="start-monitor-btn" class="btn success">🔄 启动持续监控</button>
             <button id="stop-monitor-btn" class="btn danger">⏹️ 停止监控</button>
             <button id="window-count-btn" class="btn">📊 获取窗口数量</button>
+            
+            <!-- 新增反划词弹框功能 -->
+            <button id="block-popup-btn" class="btn">🛡️ 阻止划词弹框</button>
+            <button id="start-anti-popup-btn" class="btn success">🚫 启动反划词监控</button>
+            <button id="stop-anti-popup-btn" class="btn danger">⏹️ 停止反划词监控</button>
+            <button id="super-anti-popup-btn" class="btn">💥 超级反划词模式</button>
         </div>
 
         <div class="status">
@@ -208,7 +214,11 @@
                     setCurrentWindowTopmostSuperUltimate: () => Promise.resolve('回退模式：功能不可用'),
                     startTopmostMonitor: () => Promise.resolve('回退模式：功能不可用'),
                     stopTopmostMonitor: () => Promise.resolve('回退模式：功能不可用'),
-                    getWindowCount: () => Promise.resolve(0)
+                    getWindowCount: () => Promise.resolve(0),
+                    blockWordLookupPopups: () => Promise.resolve('回退模式：功能不可用'),
+                    startAntiPopupMonitor: () => Promise.resolve('回退模式：功能不可用'),
+                    stopAntiPopupMonitor: () => Promise.resolve('回退模式：功能不可用'),
+                    startSuperAntiPopupMode: () => Promise.resolve('回退模式：功能不可用')
                 };
                 return false;
             }
@@ -295,6 +305,23 @@
 
             document.getElementById('window-count-btn').addEventListener('click', () => {
                 executeAction('获取窗口数量', window.electronAPI.getWindowCount, 'window-count-btn');
+            });
+
+            // 新增反划词弹框功能事件绑定
+            document.getElementById('block-popup-btn').addEventListener('click', () => {
+                executeAction('阻止划词弹框', window.electronAPI.blockWordLookupPopups, 'block-popup-btn');
+            });
+
+            document.getElementById('start-anti-popup-btn').addEventListener('click', () => {
+                executeAction('启动反划词监控', window.electronAPI.startAntiPopupMonitor, 'start-anti-popup-btn');
+            });
+
+            document.getElementById('stop-anti-popup-btn').addEventListener('click', () => {
+                executeAction('停止反划词监控', window.electronAPI.stopAntiPopupMonitor, 'stop-anti-popup-btn');
+            });
+
+            document.getElementById('super-anti-popup-btn').addEventListener('click', () => {
+                executeAction('超级反划词模式', window.electronAPI.startSuperAntiPopupMode, 'super-anti-popup-btn');
             });
 
             // 键盘快捷键

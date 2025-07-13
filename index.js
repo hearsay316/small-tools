@@ -310,7 +310,7 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { minimizeOtherWindows, hideOtherWindows, showOtherWindows, setCurrentWindowTopmostAggressive, setCurrentWindowTopmostUltimate, setCurrentWindowTopmostSuperUltimate, stopSuperUltimateTopmost, startTopmostMonitor, stopTopmostMonitor, setCurrentWindowTopmost, removeCurrentWindowTopmost } = nativeBinding
+const { minimizeOtherWindows, hideOtherWindows, showOtherWindows, setCurrentWindowTopmostAggressive, setCurrentWindowTopmostUltimate, setCurrentWindowTopmostSuperUltimate, stopSuperUltimateTopmost, startTopmostMonitor, stopTopmostMonitor, setCurrentWindowTopmost, removeCurrentWindowTopmost, blockWordLookupPopups, startAntiPopupMonitor, stopAntiPopupMonitor, startSuperAntiPopupMode, addBlockedExe, removeBlockedExe, clearBlockedExeList, getBlockedExeList } = nativeBinding
 
 module.exports.minimizeOtherWindows = minimizeOtherWindows
 module.exports.hideOtherWindows = hideOtherWindows
@@ -323,3 +323,11 @@ module.exports.startTopmostMonitor = startTopmostMonitor
 module.exports.stopTopmostMonitor = stopTopmostMonitor
 module.exports.setCurrentWindowTopmost = setCurrentWindowTopmost
 module.exports.removeCurrentWindowTopmost = removeCurrentWindowTopmost
+module.exports.blockWordLookupPopups = blockWordLookupPopups
+module.exports.startAntiPopupMonitor = startAntiPopupMonitor
+module.exports.stopAntiPopupMonitor = stopAntiPopupMonitor
+module.exports.startSuperAntiPopupMode = startSuperAntiPopupMode
+module.exports.addBlockedExe = addBlockedExe
+module.exports.removeBlockedExe = removeBlockedExe
+module.exports.clearBlockedExeList = clearBlockedExeList
+module.exports.getBlockedExeList = getBlockedExeList

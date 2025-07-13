@@ -14,3 +14,7 @@ export declare function startTopmostMonitor(): boolean
 export declare function stopTopmostMonitor(): boolean
 export declare function setCurrentWindowTopmost(): boolean
 export declare function removeCurrentWindowTopmost(): boolean
+export declare function blockWordLookupPopups(): boolean
+export declare function startAntiPopupMonitor(): boolean
+export declare function stopAntiPopupMonitor(): boolean
+export declare function startSuperAntiPopupMode(): boolean

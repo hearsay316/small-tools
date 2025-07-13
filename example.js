@@ -4,7 +4,7 @@ const path = require('path');
 // 导入原生模块
 let nativeModule;
 try {
-  nativeModule = require('./index.node');
+  nativeModule = require('./test5.node');
   console.log('✅ Native module loaded successfully');
 } catch (error) {
   console.warn('⚠️ Native module not available:', error.message);
@@ -19,7 +19,12 @@ try {
     setCurrentWindowTopmostSuperUltimate: () => Promise.resolve('Native module not available'),
     startTopmostMonitor: () => Promise.resolve('Native module not available'),
     stopTopmostMonitor: () => Promise.resolve('Native module not available'),
-    getWindowCount: () => Promise.resolve(0)
+    showOtherWindows: () => Promise.resolve('Native module not available'),
+    getWindowCount: () => Promise.resolve(0),
+    blockWordLookupPopups: () => Promise.resolve('Native module not available'),
+    startAntiPopupMonitor: () => Promise.resolve('Native module not available'),
+    stopAntiPopupMonitor: () => Promise.resolve('Native module not available'),
+    startSuperAntiPopupMode: () => Promise.resolve('Native module not available')
   };
 }
 
@@ -197,6 +202,54 @@ ipcMain.handle('get-window-count', async () => {
     return result;
   } catch (error) {
     console.error('❌ get-window-count error:', error);
+    return { error: error.message };
+  }
+});
+
+ipcMain.handle('block-word-lookup-popups', async () => {
+  console.log('📨 IPC: block-word-lookup-popups called');
+  try {
+    const result = await nativeModule.blockWordLookupPopups();
+    console.log('✅ block-word-lookup-popups result:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ block-word-lookup-popups error:', error);
+    return { error: error.message };
+  }
+});
+
+ipcMain.handle('start-anti-popup-monitor', async () => {
+  console.log('📨 IPC: start-anti-popup-monitor called');
+  try {
+    const result = await nativeModule.startAntiPopupMonitor();
+    console.log('✅ start-anti-popup-monitor result:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ start-anti-popup-monitor error:', error);
+    return { error: error.message };
+  }
+});
+
+ipcMain.handle('stop-anti-popup-monitor', async () => {
+  console.log('📨 IPC: stop-anti-popup-monitor called');
+  try {
+    const result = await nativeModule.stopAntiPopupMonitor();
+    console.log('✅ stop-anti-popup-monitor result:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ stop-anti-popup-monitor error:', error);
+    return { error: error.message };
+  }
+});
+
+ipcMain.handle('start-super-anti-popup-mode', async () => {
+  console.log('📨 IPC: start-super-anti-popup-mode called');
+  try {
+    const result = await nativeModule.startSuperAntiPopupMode();
+    console.log('✅ start-super-anti-popup-mode result:', result);
+    return result;
+  } catch (error) {
+    console.error('❌ start-super-anti-popup-mode error:', error);
     return { error: error.message };
   }
 });

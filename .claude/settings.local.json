@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run build:*)",
+      "Bash(source:*)",
+      "Bash(rustc:*)",
+      "Bash(node:*)",
+      "Bash(ls:*)",
+      "Bash(npx:*)",
+      "Bash(taskkill:*)"
+    ],
+    "deny": []
+  }
+}

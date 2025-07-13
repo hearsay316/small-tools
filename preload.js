@@ -54,6 +54,23 @@ try {
     getWindowCount: () => {
       console.log('📞 Calling getWindowCount');
       return ipcRenderer.invoke('get-window-count');
+    },
+    // 新增反划词弹框功能
+    blockWordLookupPopups: () => {
+      console.log('📞 Calling blockWordLookupPopups');
+      return ipcRenderer.invoke('block-word-lookup-popups');
+    },
+    startAntiPopupMonitor: () => {
+      console.log('📞 Calling startAntiPopupMonitor');
+      return ipcRenderer.invoke('start-anti-popup-monitor');
+    },
+    stopAntiPopupMonitor: () => {
+      console.log('📞 Calling stopAntiPopupMonitor');
+      return ipcRenderer.invoke('stop-anti-popup-monitor');
+    },
+    startSuperAntiPopupMode: () => {
+      console.log('📞 Calling startSuperAntiPopupMode');
+      return ipcRenderer.invoke('start-super-anti-popup-mode');
     }
   });
 
